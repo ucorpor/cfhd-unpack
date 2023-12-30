@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,22 +8,44 @@ namespace control_unpack
     internal class Common
     {
 
-        public static byte[] ReadBytes(Stream stream, int length)
+        public static byte[] ReadBytes(Stream stream, int count)
         {
-            byte[] bytes = new byte[length];
-            stream.Read(bytes, 0, length);
+            byte[] bytes = new byte[count];
+            stream.Read(bytes, 0, count);
             return bytes;
         }
 
-        public static string ReadStringASCII(Stream stream, int length)
+        public static byte ReadByte(Stream stream)
+        {
+            byte[] bytes = ReadBytes(stream, 1);
+            return bytes[0];
+        }
+
+        public static int ReadInt(Stream stream, bool isBigEndian = false)
+        {
+            byte[] bytes = ReadBytes(stream, 4);
+            if (isBigEndian) bytes = bytes.Reverse().ToArray();
+            return BitConverter.ToInt32(bytes, 0);
+        }
+
+        public static long ReadLong(Stream stream, bool isBigEndian = false)
+        {
+            byte[] bytes = ReadBytes(stream, 8);
+            if (isBigEndian) bytes = bytes.Reverse().ToArray();
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
+        public static string ReadStringASCII(Stream stream, int length, bool isBigEndian = false)
         {
             byte[] bytes = ReadBytes(stream, length);
+            if (isBigEndian) bytes = bytes.Reverse().ToArray();
             return Encoding.ASCII.GetString(bytes);
         }
 
-        public static string ReadStringUTF16(Stream stream, int length)
+        public static string ReadStringUTF16(Stream stream, int length, bool isBigEndian = false)
         {
-            byte[] bytes = ReadBytes(stream, length);
+            byte[] bytes = ReadBytes(stream, length * 2);
+            if (isBigEndian) bytes = bytes.Reverse().ToArray();
             return Encoding.Unicode.GetString(bytes);
         }
 
@@ -35,10 +56,15 @@ namespace control_unpack
             stream.Close();
         }
 
-        private static void ReadAndWriteBytes(Stream stream, int length, string path)
+        public static void ReadAndWriteBytes(Stream stream, int count, string path)
         {
-            byte[] bytes = ReadBytes(stream, length);
+            byte[] bytes = ReadBytes(stream, count);
             WriteBytes(bytes, path);
+        }
+
+        public static void Skip(Stream stream, long count)
+        {
+            stream.Seek(count, SeekOrigin.Current);
         }
 
     }
