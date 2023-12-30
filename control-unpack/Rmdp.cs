@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace control_unpack
 {
     internal class Rmdp
     {
-        public static void Unpack(string rmdpPath, string binPath, string metaPath)
+        public static void Unpack(string rmdpPath, string binPath, string metaPath, MainForm form = null)
         {
             Stream binStream = File.OpenRead(binPath);
             byte endianness = Common.ReadByte(binStream);
@@ -20,6 +21,11 @@ namespace control_unpack
             int ver = Common.ReadInt(binStream, isBigEndian);
             int dirsCount = Common.ReadInt(binStream, isBigEndian);
             int filesCount = Common.ReadInt(binStream, isBigEndian);
+            if (form != null)
+            {
+                form.rmdpProgressLbl.Text = $"0 / {filesCount} files";
+                Application.DoEvents();
+            }
 
             KeyValuePair<int, long>[] dirs = new KeyValuePair<int, long>[dirsCount];
             binStream.Seek(157, SeekOrigin.Begin);
@@ -86,6 +92,12 @@ namespace control_unpack
                 Directory.CreateDirectory(dirname);
                 rmdpStream.Seek(contentOffset, SeekOrigin.Begin);
                 Common.ReadAndWriteBytes(rmdpStream, contentLength, path);
+
+                if (form != null)
+                {
+                    form.rmdpProgressLbl.Text = $"{i + 1} / {filesCount} files";
+                    Application.DoEvents();
+                }
             }
 
             binStream.Close();

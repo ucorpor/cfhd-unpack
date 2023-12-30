@@ -39,6 +39,7 @@
             this.rmdpUnpackBtn = new System.Windows.Forms.Button();
             this.repackPage = new System.Windows.Forms.TabPage();
             this.stringsRepackBtn = new System.Windows.Forms.Button();
+            this.rmdpProgressLbl = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.unpackPage.SuspendLayout();
             this.repackPage.SuspendLayout();
@@ -94,6 +95,7 @@
             // 
             // unpackPage
             // 
+            this.unpackPage.Controls.Add(this.rmdpProgressLbl);
             this.unpackPage.Controls.Add(this.rmdpPathBtn);
             this.unpackPage.Controls.Add(this.rmdpPathTxt);
             this.unpackPage.Controls.Add(this.rmdpUnpackBtn);
@@ -156,6 +158,15 @@
             this.stringsRepackBtn.UseVisualStyleBackColor = true;
             this.stringsRepackBtn.Click += new System.EventHandler(this.stringsRepackBtn_Click);
             // 
+            // rmdpProgressLbl
+            // 
+            this.rmdpProgressLbl.AutoSize = true;
+            this.rmdpProgressLbl.Location = new System.Drawing.Point(6, 37);
+            this.rmdpProgressLbl.Name = "rmdpProgressLbl";
+            this.rmdpProgressLbl.Size = new System.Drawing.Size(85, 13);
+            this.rmdpProgressLbl.TabIndex = 6;
+            this.rmdpProgressLbl.Text = "rmdpProgressLbl";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -191,6 +202,7 @@
         private System.Windows.Forms.Button rmdpPathBtn;
         private System.Windows.Forms.TextBox rmdpPathTxt;
         private System.Windows.Forms.Button rmdpUnpackBtn;
+        public System.Windows.Forms.Label rmdpProgressLbl;
     }
 }
 

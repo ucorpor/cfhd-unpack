@@ -19,6 +19,7 @@ namespace control_unpack
             Assembly assembly = Assembly.GetExecutingAssembly();
             string version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
             Text += $" v{version}";
+            rmdpProgressLbl.Text = string.Empty;
         }
 
         private void stringPathBtn_Click(object sender, EventArgs e)
@@ -141,7 +142,7 @@ namespace control_unpack
                 bool isMetaExists = File.Exists(metaPath);
                 if (isBinExists && isMetaExists)
                 {
-                    Rmdp.Unpack(rmdpPath, binPath, metaPath);
+                    Rmdp.Unpack(rmdpPath, binPath, metaPath, this);
                     MessageBox.Show("Successfully unpacked", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -156,6 +157,7 @@ namespace control_unpack
             }
             finally
             {
+                rmdpProgressLbl.Text = string.Empty;
                 Enabled = true;
                 Cursor = Cursors.Default;
             }
