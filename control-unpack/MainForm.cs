@@ -122,7 +122,7 @@ namespace control_unpack
             DialogResult result = dialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                stringPathTxt.Text = dialog.FileName;
+                rmdpPathTxt.Text = dialog.FileName;
             }
         }
 
@@ -142,8 +142,7 @@ namespace control_unpack
                 if (isBinExists && isMetaExists)
                 {
                     Rmdp.Unpack(rmdpPath, binPath, metaPath);
-                    string message = $"Repacked string_table.bin saccessufully saved to:{Environment.NewLine}{repackedPath}";
-                    MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Successfully unpacked", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
