@@ -13,9 +13,9 @@ namespace control_unpack
         {
             Stream binStream = File.OpenRead(binPath);
             byte endianness = Common.ReadByte(binStream);
-            // endianness = 0 - pc (little-endian)
-            // endianness != 0 - console (big-endian)
-            bool isBigEndian = endianness != 0;
+            // endianness = 0x0 - pc (little-endian)
+            // endianness != 0x0 - console (big-endian)
+            bool isBigEndian = endianness != 0x0;
 
             int ver = Common.ReadInt(binStream, isBigEndian);
             int dirsCount = Common.ReadInt(binStream, isBigEndian);
@@ -25,25 +25,25 @@ namespace control_unpack
             binStream.Seek(157, SeekOrigin.Begin);
             for (int i = 0; i < dirsCount; i++)
             {
-                Common.Skip(binStream, 8); // long
+                Common.Skip(binStream, 8L); // long
                 // parentIndex < dirsCount
                 int parentIndex = (int) Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 4); // int
+                Common.Skip(binStream, 4L); // int
                 long dirnameOffset = Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 20); // int, long, long
+                Common.Skip(binStream, 20L); // int, long, long
                 dirs[i] = new KeyValuePair<int, long>(parentIndex, dirnameOffset);
             }
 
             long[,] files = new long[filesCount, 4];
             for (int i = 0; i < filesCount; i++)
             {
-                Common.Skip(binStream, 8); // long
+                Common.Skip(binStream, 8L); // long
                 long dirIndex = Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 4); // int
+                Common.Skip(binStream, 4L); // int
                 long filenameOffset = Common.ReadLong(binStream, isBigEndian);
                 long contentOffset = Common.ReadLong(binStream, isBigEndian);
                 long contentLength = Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 16);
+                Common.Skip(binStream, 16L);
 
                 files[i, 0] = filenameOffset;
                 files[i, 1] = contentOffset;
@@ -51,14 +51,14 @@ namespace control_unpack
                 files[i, 3] = dirIndex;
             }
 
-            Common.Skip(binStream, 44);
+            Common.Skip(binStream, 44L);
             long start = binStream.Position;
 
             string[] dirpaths = new string[dirsCount];
             for (int i = 0; i < dirsCount; i++)
             {
                 long dirnameOffset = dirs[i].Value;
-                if (dirnameOffset == -1)
+                if (dirnameOffset == -1L)
                 {
                     dirpaths[i] = string.Empty; // root
                 }
@@ -96,12 +96,14 @@ namespace control_unpack
         {
             List<byte> result = new List<byte>();
             stream.Seek(position, SeekOrigin.Begin);
+
             byte b = Common.ReadByte(stream);
-            while (b != 0)
+            while (b != 0x0)
             {
                 result.Add(b);
                 b = Common.ReadByte(stream);
             }
+
             string filename = Encoding.UTF8.GetString(result.ToArray());
             return filename;
         }

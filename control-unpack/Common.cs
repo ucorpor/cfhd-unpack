@@ -28,6 +28,13 @@ namespace control_unpack
             return BitConverter.ToInt32(bytes, 0);
         }
 
+        public static uint ReadUInt(Stream stream, bool isBigEndian = false)
+        {
+            byte[] bytes = ReadBytes(stream, 4);
+            if (isBigEndian) bytes = bytes.Reverse().ToArray();
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
         public static long ReadLong(Stream stream, bool isBigEndian = false)
         {
             byte[] bytes = ReadBytes(stream, 8);
@@ -35,17 +42,15 @@ namespace control_unpack
             return BitConverter.ToInt64(bytes, 0);
         }
 
-        public static string ReadASCII(Stream stream, int length, bool isBigEndian = false)
+        public static string ReadASCII(Stream stream, int length)
         {
             byte[] bytes = ReadBytes(stream, length);
-            if (isBigEndian) bytes = bytes.Reverse().ToArray();
             return Encoding.ASCII.GetString(bytes);
         }
 
-        public static string ReadUTF16(Stream stream, int length, bool isBigEndian = false)
+        public static string ReadUTF16(Stream stream, int length)
         {
             byte[] bytes = ReadBytes(stream, length * 2);
-            if (isBigEndian) bytes = bytes.Reverse().ToArray();
             return Encoding.Unicode.GetString(bytes);
         }
 

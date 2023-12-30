@@ -12,15 +12,15 @@ namespace control_unpack
             string txtPath = $"{binPath}.txt";
             Stream binStream = File.OpenRead(binPath);
             byte[] magic = Common.ReadBytes(binStream, 2);
-            Common.Skip(binStream, 2); // skip
+            Common.Skip(binStream, 2L);
 
             string output = "";
             while (binStream.Position < binStream.Length)
             {
-                int keyLength = Common.ReadInt(binStream);
+                int keyLength = (int) Common.ReadUInt(binStream);
                 string key = Common.ReadASCII(binStream, keyLength);
 
-                int valueLength = Common.ReadInt(binStream);
+                int valueLength = (int) Common.ReadUInt(binStream);
                 string value = Common.ReadUTF16(binStream, valueLength);
 
                 output += $"{key}=`{value}`{Environment.NewLine}";
