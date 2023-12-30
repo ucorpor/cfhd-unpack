@@ -12,28 +12,29 @@ namespace control_unpack
         public static void Unpack(string rmdpPath, string binPath, string metaPath)
         {
             Stream binStream = File.OpenRead(binPath);
-            byte control = Common.ReadByte(binStream);
-            // control = 0 - pc (little-endian), control != 0 - console (big-endian)
-            bool isBigEndian = control != 0;
+            byte endianness = Common.ReadByte(binStream);
+            // endianness = 0 - pc (little-endian)
+            // endianness != 0 - console (big-endian)
+            bool isBigEndian = endianness != 0;
 
             int ver = Common.ReadInt(binStream, isBigEndian);
             int dirsCount = Common.ReadInt(binStream, isBigEndian);
             int filesCount = Common.ReadInt(binStream, isBigEndian);
 
-            List<KeyValuePair<long, long>> dirs = new List<KeyValuePair<long, long>>();
+            KeyValuePair<int, long>[] dirs = new KeyValuePair<int, long>[dirsCount];
             binStream.Seek(157, SeekOrigin.Begin);
             for (int i = 0; i < dirsCount; i++)
             {
                 Common.Skip(binStream, 8); // long
-                long parent = Common.ReadLong(binStream, isBigEndian);
+                // parentIndex < dirsCount
+                int parentIndex = (int) Common.ReadLong(binStream, isBigEndian);
                 Common.Skip(binStream, 4); // int
                 long dirnameOffset = Common.ReadLong(binStream, isBigEndian);
                 Common.Skip(binStream, 20); // int, long, long
-                KeyValuePair<long, long> pair = new KeyValuePair<long, long>(parent, dirnameOffset);
-                dirs.Add(pair);
+                dirs[i] = new KeyValuePair<int, long>(parentIndex, dirnameOffset);
             }
 
-            List<long[]> r = new List<long[]>();
+            long[,] files = new long[filesCount, 4];
             for (int i = 0; i < filesCount; i++)
             {
                 Common.Skip(binStream, 8); // long
@@ -43,38 +44,44 @@ namespace control_unpack
                 long contentOffset = Common.ReadLong(binStream, isBigEndian);
                 long contentLength = Common.ReadLong(binStream, isBigEndian);
                 Common.Skip(binStream, 16);
-                long[] array = { filenameOffset, contentOffset, contentLength, dirIndex };
-                r.Add(array);
+
+                files[i, 0] = filenameOffset;
+                files[i, 1] = contentOffset;
+                files[i, 2] = contentLength;
+                files[i, 3] = dirIndex;
             }
 
             Common.Skip(binStream, 44);
             long start = binStream.Position;
-            List<string> fullNames = new List<string>();
-            foreach (KeyValuePair<long, long> dir in dirs)
+
+            string[] dirpaths = new string[dirsCount];
+            for (int i = 0; i < dirsCount; i++)
             {
-                if (dir.Value == -1)
+                long dirnameOffset = dirs[i].Value;
+                if (dirnameOffset == -1)
                 {
-                    fullNames.Add(string.Empty);
+                    dirpaths[i] = string.Empty; // root
                 }
                 else
                 {
-                    string dirname = ReadFilename(binStream, start + dir.Value);
-                    string path = Path.Combine(fullNames[Convert.ToInt32(dir.Key)], dirname);
-                    fullNames.Add(path);
+                    int parentIndex = dirs[i].Key;
+                    string dirname = ReadFilename(binStream, start + dirnameOffset);
+                    dirpaths[i] = Path.Combine(dirpaths[parentIndex], dirname);
                 }
             }
 
             Stream rmdpStream = File.OpenRead(rmdpPath);
             string rmdpDir = Path.GetDirectoryName(rmdpPath);
-            foreach (long[] i in r)
+            for (int i = 0; i < filesCount; i++)
             {
-                long filenameOffset = i[0];
-                long contentOffset = i[1];
-                int contentLength = Convert.ToInt32(i[2]);
-                long dirIndex = i[3];
+                long filenameOffset = files[i, 0];
+                long contentOffset = files[i, 1];
+                // stream can't read more than int.MaxValue bytes
+                int contentLength = (int) files[i, 2];
+                int dirIndex = (int) files[i, 3]; // dirIndex < dirCount
 
                 string filename = ReadFilename(binStream, start + filenameOffset);
-                string dirname = Path.Combine(rmdpDir, fullNames[Convert.ToInt32(dirIndex)]);
+                string dirname = Path.Combine(rmdpDir, dirpaths[dirIndex]);
                 string path = Path.Combine(dirname, filename);
                 Directory.CreateDirectory(dirname);
                 rmdpStream.Seek(contentOffset, SeekOrigin.Begin);
