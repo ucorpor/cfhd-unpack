@@ -18,10 +18,10 @@ namespace control_unpack
             while (binStream.Position < binStream.Length)
             {
                 int keyLength = Common.ReadInt(binStream);
-                string key = Common.ReadStringASCII(binStream, keyLength);
+                string key = Common.ReadASCII(binStream, keyLength);
 
                 int valueLength = Common.ReadInt(binStream);
-                string value = Common.ReadStringUTF16(binStream, valueLength);
+                string value = Common.ReadUTF16(binStream, valueLength);
 
                 output += $"{key}=`{value}`{Environment.NewLine}";
             }

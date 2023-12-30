@@ -35,14 +35,14 @@ namespace control_unpack
             return BitConverter.ToInt64(bytes, 0);
         }
 
-        public static string ReadStringASCII(Stream stream, int length, bool isBigEndian = false)
+        public static string ReadASCII(Stream stream, int length, bool isBigEndian = false)
         {
             byte[] bytes = ReadBytes(stream, length);
             if (isBigEndian) bytes = bytes.Reverse().ToArray();
             return Encoding.ASCII.GetString(bytes);
         }
 
-        public static string ReadStringUTF16(Stream stream, int length, bool isBigEndian = false)
+        public static string ReadUTF16(Stream stream, int length, bool isBigEndian = false)
         {
             byte[] bytes = ReadBytes(stream, length * 2);
             if (isBigEndian) bytes = bytes.Reverse().ToArray();
