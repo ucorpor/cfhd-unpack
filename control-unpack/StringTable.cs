@@ -11,16 +11,16 @@ namespace control_unpack
         {
             string txtPath = $"{binPath}.txt";
             Stream binStream = File.OpenRead(binPath);
-            byte[] ver = Common.ReadBytes(binStream, 2);
-            Common.ReadBytes(binStream, 2); // skip
+            byte[] magic = Common.ReadBytes(binStream, 2);
+            Common.Skip(binStream, 2); // skip
 
             string output = "";
             while (binStream.Position < binStream.Length)
             {
-                int keyLength = BitConverter.ToInt32(Common.ReadBytes(binStream, 4), 0);
+                int keyLength = Common.ReadInt(binStream);
                 string key = Common.ReadStringASCII(binStream, keyLength);
 
-                int valueLength = BitConverter.ToInt32(Common.ReadBytes(binStream, 4), 0) * 2;
+                int valueLength = Common.ReadInt(binStream);
                 string value = Common.ReadStringUTF16(binStream, valueLength);
 
                 output += $"{key}=`{value}`{Environment.NewLine}";
@@ -40,8 +40,8 @@ namespace control_unpack
             File.WriteAllText(repackedPath, string.Empty);
 
             Stream binStream = File.OpenRead(binPath);
-            byte[] ver = Common.ReadBytes(binStream, 4);
-            Common.WriteBytes(ver, repackedPath);
+            byte[] magic = Common.ReadBytes(binStream, 4);
+            Common.WriteBytes(magic, repackedPath);
             binStream.Close();
 
             StreamReader txtReader = new StreamReader(txtFile, Encoding.Unicode, true);
