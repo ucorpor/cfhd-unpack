@@ -46,7 +46,7 @@
             // 
             // stringPathBtn
             // 
-            this.stringPathBtn.Location = new System.Drawing.Point(262, 5);
+            this.stringPathBtn.Location = new System.Drawing.Point(262, 70);
             this.stringPathBtn.Name = "stringPathBtn";
             this.stringPathBtn.Size = new System.Drawing.Size(96, 23);
             this.stringPathBtn.TabIndex = 0;
@@ -56,14 +56,14 @@
             // 
             // stringPathTxt
             // 
-            this.stringPathTxt.Location = new System.Drawing.Point(6, 5);
+            this.stringPathTxt.Location = new System.Drawing.Point(6, 70);
             this.stringPathTxt.Name = "stringPathTxt";
             this.stringPathTxt.Size = new System.Drawing.Size(250, 20);
             this.stringPathTxt.TabIndex = 1;
             // 
             // stringUnpackBtn
             // 
-            this.stringUnpackBtn.Location = new System.Drawing.Point(171, 31);
+            this.stringUnpackBtn.Location = new System.Drawing.Point(171, 96);
             this.stringUnpackBtn.Name = "stringUnpackBtn";
             this.stringUnpackBtn.Size = new System.Drawing.Size(187, 23);
             this.stringUnpackBtn.TabIndex = 2;
@@ -74,7 +74,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(170, 166);
+            this.linkLabel1.Location = new System.Drawing.Point(170, 165);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(212, 13);
             this.linkLabel1.TabIndex = 4;
@@ -89,7 +89,7 @@
             this.tabControl1.Location = new System.Drawing.Point(11, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(375, 151);
+            this.tabControl1.Size = new System.Drawing.Size(375, 150);
             this.tabControl1.TabIndex = 5;
             // 
             // unpackPage
@@ -103,14 +103,14 @@
             this.unpackPage.Location = new System.Drawing.Point(4, 22);
             this.unpackPage.Name = "unpackPage";
             this.unpackPage.Padding = new System.Windows.Forms.Padding(3);
-            this.unpackPage.Size = new System.Drawing.Size(367, 125);
+            this.unpackPage.Size = new System.Drawing.Size(367, 124);
             this.unpackPage.TabIndex = 0;
             this.unpackPage.Text = "Unpack";
             this.unpackPage.UseVisualStyleBackColor = true;
             // 
             // rmdpPathBtn
             // 
-            this.rmdpPathBtn.Location = new System.Drawing.Point(262, 69);
+            this.rmdpPathBtn.Location = new System.Drawing.Point(262, 6);
             this.rmdpPathBtn.Name = "rmdpPathBtn";
             this.rmdpPathBtn.Size = new System.Drawing.Size(96, 23);
             this.rmdpPathBtn.TabIndex = 3;
@@ -120,14 +120,14 @@
             // 
             // rmdpPathTxt
             // 
-            this.rmdpPathTxt.Location = new System.Drawing.Point(6, 69);
+            this.rmdpPathTxt.Location = new System.Drawing.Point(6, 6);
             this.rmdpPathTxt.Name = "rmdpPathTxt";
             this.rmdpPathTxt.Size = new System.Drawing.Size(250, 20);
             this.rmdpPathTxt.TabIndex = 4;
             // 
             // rmdpUnpackBtn
             // 
-            this.rmdpUnpackBtn.Location = new System.Drawing.Point(171, 95);
+            this.rmdpUnpackBtn.Location = new System.Drawing.Point(171, 32);
             this.rmdpUnpackBtn.Name = "rmdpUnpackBtn";
             this.rmdpUnpackBtn.Size = new System.Drawing.Size(187, 23);
             this.rmdpUnpackBtn.TabIndex = 5;
@@ -141,7 +141,7 @@
             this.repackPage.Location = new System.Drawing.Point(4, 22);
             this.repackPage.Name = "repackPage";
             this.repackPage.Padding = new System.Windows.Forms.Padding(3);
-            this.repackPage.Size = new System.Drawing.Size(367, 125);
+            this.repackPage.Size = new System.Drawing.Size(367, 124);
             this.repackPage.TabIndex = 1;
             this.repackPage.Text = "Repack";
             this.repackPage.UseVisualStyleBackColor = true;
@@ -150,7 +150,7 @@
             // 
             this.stringsRepackBtn.Location = new System.Drawing.Point(6, 6);
             this.stringsRepackBtn.Name = "stringsRepackBtn";
-            this.stringsRepackBtn.Size = new System.Drawing.Size(355, 51);
+            this.stringsRepackBtn.Size = new System.Drawing.Size(355, 113);
             this.stringsRepackBtn.TabIndex = 0;
             this.stringsRepackBtn.Text = "Repack string_table.bin...";
             this.stringsRepackBtn.UseVisualStyleBackColor = true;
@@ -160,7 +160,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(398, 190);
+            this.ClientSize = new System.Drawing.Size(398, 187);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.linkLabel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
