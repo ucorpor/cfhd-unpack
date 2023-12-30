@@ -89,7 +89,9 @@ namespace control_unpack
                 string filename = ReadFilename(binStream, start + filenameOffset);
                 string dirname = Path.Combine(rmdpDir, dirpaths[dirIndex]);
                 string path = Path.Combine(dirname, filename);
+
                 Directory.CreateDirectory(dirname);
+                File.WriteAllText(path, string.Empty);
                 rmdpStream.Seek(contentOffset, SeekOrigin.Begin);
                 Common.ReadAndWriteBytes(rmdpStream, contentLength, path);
 

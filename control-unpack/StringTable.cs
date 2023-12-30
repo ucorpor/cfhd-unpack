@@ -27,11 +27,7 @@ namespace control_unpack
             }
             binStream.Close();
             output = output.Remove(output.Length - Environment.NewLine.Length);
-
-            FileStream txtStream = File.Create(txtPath);
-            StreamWriter sw = new StreamWriter(txtStream, new UnicodeEncoding(false, true));
-            sw.Write(output);
-            sw.Close();
+            File.WriteAllText(txtPath, output, Encoding.Unicode);
         }
 
         public static void Repack(string binPath, string repackedPath)
@@ -70,5 +66,6 @@ namespace control_unpack
             }
             txtReader.Close();
         }
+
     }
 }
