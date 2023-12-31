@@ -36,7 +36,8 @@ namespace control_unpack
                 int parentIndex = (int) Common.ReadLong(binStream, isBigEndian);
                 Common.Skip(binStream, 4L); // int
                 long dirnameOffset = Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 20L); // int, long, long
+                int dirNumber = Common.ReadInt(binStream); // 1, 2, 3...
+                Common.Skip(binStream, 16L); // long, long
                 dirs[i] = new KeyValuePair<int, long>(parentIndex, dirnameOffset);
             }
 
@@ -106,7 +107,7 @@ namespace control_unpack
             rmdpStream.Close();
         }
 
-        public static string ReadFilename(Stream stream, long position)
+        private static string ReadFilename(Stream stream, long position)
         {
             List<byte> result = new List<byte>();
             stream.Seek(position, SeekOrigin.Begin);
