@@ -18,39 +18,44 @@ namespace control_unpack
             // endianness != 0x0 - console (big-endian)
             bool isBigEndian = endianness != 0x0;
 
-            int ver = Common.ReadInt(binStream, isBigEndian);
-            int dirsCount = Common.ReadInt(binStream, isBigEndian);
-            int filesCount = Common.ReadInt(binStream, isBigEndian);
+            uint ver = Common.ReadUInt(binStream, isBigEndian);
+            uint dirsCount = Common.ReadUInt(binStream, isBigEndian);
+            uint filesCount = Common.ReadUInt(binStream, isBigEndian);
             if (form != null)
             {
                 form.rmdpProgressLbl.Text = $"0 / {filesCount} files";
                 Application.DoEvents();
             }
 
-            KeyValuePair<int, long>[] dirs = new KeyValuePair<int, long>[dirsCount];
-            binStream.Seek(157, SeekOrigin.Begin);
-            for (int i = 0; i < dirsCount; i++)
+            Common.Skip(binStream, 8L);
+            uint nameSize = Common.ReadUInt(binStream, isBigEndian);
+            Common.Skip(binStream, 128L);
+
+            KeyValuePair<long, long>[] dirs = new KeyValuePair<long, long>[dirsCount];
+            for (uint i = 0; i < dirsCount; i++)
             {
-                Common.Skip(binStream, 8L); // long
-                // parentIndex < dirsCount
-                int parentIndex = (int) Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 4L); // int
+                uint dirnameHash = Common.ReadUInt(binStream, isBigEndian);
+                long nextNeighbourFolder = Common.ReadLong(binStream, isBigEndian);
+                long parentIndex = Common.ReadLong(binStream, isBigEndian);
+                uint unknown = Common.ReadUInt(binStream, isBigEndian);
                 long dirnameOffset = Common.ReadLong(binStream, isBigEndian);
-                int dirNumber = Common.ReadInt(binStream); // 1, 2, 3...
-                Common.Skip(binStream, 16L); // long, long
-                dirs[i] = new KeyValuePair<int, long>(parentIndex, dirnameOffset);
+                long nextLowerFolder = Common.ReadLong(binStream);
+                long nextFile = Common.ReadLong(binStream);
+                dirs[i] = new KeyValuePair<long, long>(parentIndex, dirnameOffset);
             }
 
             long[,] files = new long[filesCount, 4];
-            for (int i = 0; i < filesCount; i++)
+            for (uint i = 0; i < filesCount; i++)
             {
-                Common.Skip(binStream, 8L); // long
+                uint filenameHash = Common.ReadUInt(binStream, isBigEndian);
+                long nextFile = Common.ReadLong(binStream, isBigEndian);
                 long dirIndex = Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 4L); // int
+                uint flags = Common.ReadUInt(binStream, isBigEndian);
                 long filenameOffset = Common.ReadLong(binStream, isBigEndian);
                 long contentOffset = Common.ReadLong(binStream, isBigEndian);
                 long contentLength = Common.ReadLong(binStream, isBigEndian);
-                Common.Skip(binStream, 16L);
+                long contentHash = Common.ReadUInt(binStream, isBigEndian);
+                long writeTime = Common.ReadLong(binStream, isBigEndian);
 
                 files[i, 0] = filenameOffset;
                 files[i, 1] = contentOffset;
@@ -58,11 +63,11 @@ namespace control_unpack
                 files[i, 3] = dirIndex;
             }
 
-            Common.Skip(binStream, 44L);
+            Common.Skip(binStream, 48L);
             long start = binStream.Position;
 
             string[] dirpaths = new string[dirsCount];
-            for (int i = 0; i < dirsCount; i++)
+            for (uint i = 0; i < dirsCount; i++)
             {
                 long dirnameOffset = dirs[i].Value;
                 if (dirnameOffset == -1L)
@@ -71,7 +76,7 @@ namespace control_unpack
                 }
                 else
                 {
-                    int parentIndex = dirs[i].Key;
+                    long parentIndex = dirs[i].Key;
                     string dirname = ReadFilename(binStream, start + dirnameOffset);
                     dirpaths[i] = Path.Combine(dirpaths[parentIndex], dirname);
                 }
@@ -83,9 +88,8 @@ namespace control_unpack
             {
                 long filenameOffset = files[i, 0];
                 long contentOffset = files[i, 1];
-                // stream can't read more than int.MaxValue bytes
-                int contentLength = (int) files[i, 2];
-                int dirIndex = (int) files[i, 3]; // dirIndex < dirCount
+                long contentLength = files[i, 2];
+                long dirIndex = files[i, 3];
 
                 string filename = ReadFilename(binStream, start + filenameOffset);
                 string dirname = Path.Combine(rmdpDir, dirpaths[dirIndex]);

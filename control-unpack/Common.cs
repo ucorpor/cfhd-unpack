@@ -22,13 +22,6 @@ namespace control_unpack
             return bytes[0];
         }
 
-        public static int ReadInt(Stream stream, bool isBigEndian = false)
-        {
-            byte[] bytes = ReadBytes(stream, 4);
-            if (isBigEndian) bytes = bytes.Reverse().ToArray();
-            return BitConverter.ToInt32(bytes, 0);
-        }
-
         public static uint ReadUInt(Stream stream, bool isBigEndian = false)
         {
             byte[] bytes = ReadBytes(stream, 4);
