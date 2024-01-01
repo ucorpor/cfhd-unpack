@@ -8,10 +8,11 @@ namespace control_unpack
     internal class Common
     {
 
-        public static byte[] ReadBytes(Stream stream, int count)
+        public static byte[] ReadBytes(Stream stream, long count)
         {
-            byte[] bytes = new byte[count];
-            stream.Read(bytes, 0, count);
+            int intCount = (int) count;
+            byte[] bytes = new byte[intCount];
+            stream.Read(bytes, 0, intCount);
             return bytes;
         }
 
@@ -42,13 +43,13 @@ namespace control_unpack
             return BitConverter.ToInt64(bytes, 0);
         }
 
-        public static string ReadASCII(Stream stream, int length)
+        public static string ReadASCII(Stream stream, long length)
         {
             byte[] bytes = ReadBytes(stream, length);
             return Encoding.ASCII.GetString(bytes);
         }
 
-        public static string ReadUTF16(Stream stream, int length)
+        public static string ReadUTF16(Stream stream, long length)
         {
             byte[] bytes = ReadBytes(stream, length * 2);
             return Encoding.Unicode.GetString(bytes);
@@ -61,7 +62,7 @@ namespace control_unpack
             stream.Close();
         }
 
-        public static void ReadAndWriteBytes(Stream stream, int count, string path)
+        public static void ReadAndWriteBytes(Stream stream, long count, string path)
         {
             byte[] bytes = ReadBytes(stream, count);
             WriteBytes(bytes, path);

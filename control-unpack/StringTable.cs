@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -10,17 +11,15 @@ namespace control_unpack
         public static void Unpack(string binPath)
         {
             string txtPath = $"{binPath}.txt";
-            Stream binStream = File.OpenRead(binPath);
-            byte[] magic = Common.ReadBytes(binStream, 2);
-            Common.Skip(binStream, 2L);
-
             string output = "";
-            while (binStream.Position < binStream.Length)
+            Stream binStream = File.OpenRead(binPath);
+            uint stringsCount = Common.ReadUInt(binStream);
+            for (uint i = 0; i < stringsCount; i++)
             {
-                int keyLength = (int) Common.ReadUInt(binStream);
+                uint keyLength = Common.ReadUInt(binStream);
                 string key = Common.ReadASCII(binStream, keyLength);
 
-                int valueLength = (int) Common.ReadUInt(binStream);
+                uint valueLength = Common.ReadUInt(binStream);
                 string value = Common.ReadUTF16(binStream, valueLength);
 
                 output += $"{key}=`{value}`{Environment.NewLine}";
@@ -30,17 +29,11 @@ namespace control_unpack
             File.WriteAllText(txtPath, output, Encoding.Unicode);
         }
 
-        public static void Repack(string binPath, string repackedPath)
+        public static void Pack(string txtPath, string binPath)
         {
-            string txtFile = $"{binPath}.txt";
-            File.WriteAllText(repackedPath, string.Empty);
-
-            Stream binStream = File.OpenRead(binPath);
-            byte[] magic = Common.ReadBytes(binStream, 4);
-            Common.WriteBytes(magic, repackedPath);
-            binStream.Close();
-
-            StreamReader txtReader = new StreamReader(txtFile, Encoding.Unicode, true);
+            File.WriteAllText(binPath, string.Empty);
+            StreamReader txtReader = new StreamReader(txtPath, Encoding.Unicode, true);
+            Dictionary<string, string> table = new Dictionary<string, string>(); 
             while (!txtReader.EndOfStream)
             {
                 string[] keyValue = txtReader.ReadLine().Split('=');
@@ -55,16 +48,26 @@ namespace control_unpack
                     value = value.Replace("`", "");
                 }
 
-                byte[] keyBytes = Encoding.ASCII.GetBytes(key);
-                byte[] valueBytes = Encoding.Unicode.GetBytes(value);
-                byte[] keyLength = BitConverter.GetBytes(keyBytes.Length);
-                byte[] valueLength = BitConverter.GetBytes(valueBytes.Length / 2);
-                Common.WriteBytes(keyLength, repackedPath);
-                Common.WriteBytes(keyBytes, repackedPath);
-                Common.WriteBytes(valueLength, repackedPath);
-                Common.WriteBytes(valueBytes, repackedPath);
+                table.Add(key, value);
             }
             txtReader.Close();
+
+            uint stringsCount = Convert.ToUInt32(table.Count);
+            byte[] stringsCountBytes = BitConverter.GetBytes(stringsCount);
+            Common.WriteBytes(stringsCountBytes, binPath);
+
+            foreach (KeyValuePair<string, string> pair in table)
+            {
+                byte[] keyLength = BitConverter.GetBytes(pair.Key.Length);
+                byte[] keyBytes = Encoding.ASCII.GetBytes(pair.Key);
+                byte[] valueLength = BitConverter.GetBytes(pair.Value.Length);
+                byte[] valueBytes = Encoding.Unicode.GetBytes(pair.Value);
+                
+                Common.WriteBytes(keyLength, binPath);
+                Common.WriteBytes(keyBytes, binPath);
+                Common.WriteBytes(valueLength, binPath);
+                Common.WriteBytes(valueBytes, binPath);
+            }
         }
 
     }

@@ -34,12 +34,12 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.unpackPage = new System.Windows.Forms.TabPage();
+            this.rmdpProgressLbl = new System.Windows.Forms.Label();
             this.rmdpPathBtn = new System.Windows.Forms.Button();
             this.rmdpPathTxt = new System.Windows.Forms.TextBox();
             this.rmdpUnpackBtn = new System.Windows.Forms.Button();
             this.repackPage = new System.Windows.Forms.TabPage();
-            this.stringsRepackBtn = new System.Windows.Forms.Button();
-            this.rmdpProgressLbl = new System.Windows.Forms.Label();
+            this.stringsPackBtn = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.unpackPage.SuspendLayout();
             this.repackPage.SuspendLayout();
@@ -110,6 +110,15 @@
             this.unpackPage.Text = "Unpack";
             this.unpackPage.UseVisualStyleBackColor = true;
             // 
+            // rmdpProgressLbl
+            // 
+            this.rmdpProgressLbl.AutoSize = true;
+            this.rmdpProgressLbl.Location = new System.Drawing.Point(6, 37);
+            this.rmdpProgressLbl.Name = "rmdpProgressLbl";
+            this.rmdpProgressLbl.Size = new System.Drawing.Size(85, 13);
+            this.rmdpProgressLbl.TabIndex = 6;
+            this.rmdpProgressLbl.Text = "rmdpProgressLbl";
+            // 
             // rmdpPathBtn
             // 
             this.rmdpPathBtn.Location = new System.Drawing.Point(262, 6);
@@ -139,7 +148,7 @@
             // 
             // repackPage
             // 
-            this.repackPage.Controls.Add(this.stringsRepackBtn);
+            this.repackPage.Controls.Add(this.stringsPackBtn);
             this.repackPage.Location = new System.Drawing.Point(4, 22);
             this.repackPage.Name = "repackPage";
             this.repackPage.Padding = new System.Windows.Forms.Padding(3);
@@ -148,24 +157,15 @@
             this.repackPage.Text = "Repack";
             this.repackPage.UseVisualStyleBackColor = true;
             // 
-            // stringsRepackBtn
+            // stringsPackBtn
             // 
-            this.stringsRepackBtn.Location = new System.Drawing.Point(6, 6);
-            this.stringsRepackBtn.Name = "stringsRepackBtn";
-            this.stringsRepackBtn.Size = new System.Drawing.Size(355, 113);
-            this.stringsRepackBtn.TabIndex = 0;
-            this.stringsRepackBtn.Text = "Repack string_table.bin...";
-            this.stringsRepackBtn.UseVisualStyleBackColor = true;
-            this.stringsRepackBtn.Click += new System.EventHandler(this.stringsRepackBtn_Click);
-            // 
-            // rmdpProgressLbl
-            // 
-            this.rmdpProgressLbl.AutoSize = true;
-            this.rmdpProgressLbl.Location = new System.Drawing.Point(6, 37);
-            this.rmdpProgressLbl.Name = "rmdpProgressLbl";
-            this.rmdpProgressLbl.Size = new System.Drawing.Size(85, 13);
-            this.rmdpProgressLbl.TabIndex = 6;
-            this.rmdpProgressLbl.Text = "rmdpProgressLbl";
+            this.stringsPackBtn.Location = new System.Drawing.Point(6, 6);
+            this.stringsPackBtn.Name = "stringsPackBtn";
+            this.stringsPackBtn.Size = new System.Drawing.Size(355, 113);
+            this.stringsPackBtn.TabIndex = 0;
+            this.stringsPackBtn.Text = "Create string_table.bin...";
+            this.stringsPackBtn.UseVisualStyleBackColor = true;
+            this.stringsPackBtn.Click += new System.EventHandler(this.stringsPackBtn_Click);
             // 
             // MainForm
             // 
@@ -198,7 +198,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage unpackPage;
         private System.Windows.Forms.TabPage repackPage;
-        private System.Windows.Forms.Button stringsRepackBtn;
+        private System.Windows.Forms.Button stringsPackBtn;
         private System.Windows.Forms.Button rmdpPathBtn;
         private System.Windows.Forms.TextBox rmdpPathTxt;
         private System.Windows.Forms.Button rmdpUnpackBtn;

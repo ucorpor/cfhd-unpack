@@ -65,23 +65,22 @@ namespace control_unpack
             Process.Start("https://github.com/ucorpor/ibf-unpack");
         }
 
-        private void stringsRepackBtn_Click(object sender, EventArgs e)
+        private void stringsPackBtn_Click(object sender, EventArgs e)
         {
             Enabled = false;
             Cursor = Cursors.WaitCursor;
 
             try
             {
-                OpenFileDialog binFileDialog = new OpenFileDialog();
-                binFileDialog.FileName = "string_table.bin";
-                binFileDialog.Filter = "BIN-files (*.bin)|*.bin"
+                OpenFileDialog txtFileDialog = new OpenFileDialog();
+                txtFileDialog.FileName = "string_table.bin.txt";
+                txtFileDialog.Filter = "TXT-files (*.txt)|*.txt"
                     + "|All files (*.*)|*.*";
 
-                DialogResult result = binFileDialog.ShowDialog();
+                DialogResult result = txtFileDialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    string binPath = binFileDialog.FileName;
-                    string txtPath = $"{binPath}.txt";
+                    string txtPath = txtFileDialog.FileName;
                     if (File.Exists(txtPath))
                     {
                         SaveFileDialog saveDialog = new SaveFileDialog();
@@ -92,15 +91,15 @@ namespace control_unpack
 
                         if (saveDialog.ShowDialog() == DialogResult.OK)
                         {
-                            string repackedPath = saveDialog.FileName;
-                            StringTable.Repack(binPath, repackedPath);
-                            string message = $"Repacked string_table.bin saccessufully saved to:{Environment.NewLine}{repackedPath}";
+                            string savePath = saveDialog.FileName;
+                            StringTable.Pack(txtPath, savePath);
+                            string message = $"Repacked string_table.bin saccessufully saved to:{Environment.NewLine}{savePath}";
                             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("string_table.bin.txt file not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"File not found:{Environment.NewLine}{txtPath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
