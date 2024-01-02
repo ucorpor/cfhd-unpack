@@ -62,7 +62,7 @@ namespace control_unpack
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/ucorpor/ibf-unpack");
+            Process.Start("https://github.com/ucorpor/control-unpack");
         }
 
         private void stringsPackBtn_Click(object sender, EventArgs e)
