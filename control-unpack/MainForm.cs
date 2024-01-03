@@ -93,7 +93,7 @@ namespace control_unpack
                         {
                             string savePath = saveDialog.FileName;
                             StringTable.Pack(txtPath, savePath);
-                            string message = $"Repacked string_table.bin saccessufully saved to:{Environment.NewLine}{savePath}";
+                            string message = $"Created string_table.bin saccessufully saved to:{Environment.NewLine}{savePath}";
                             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
