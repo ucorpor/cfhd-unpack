@@ -36,12 +36,12 @@
             this.rmdpPathTxt = new System.Windows.Forms.TextBox();
             this.rmdpUnpackBtn = new System.Windows.Forms.Button();
             this.stringPage = new System.Windows.Forms.TabPage();
-            this.stringsPackBtn = new System.Windows.Forms.Button();
+            this.xlsx2txtBtn = new System.Windows.Forms.Button();
+            this.txt2xlsxBtn = new System.Windows.Forms.Button();
             this.stringPathBtn = new System.Windows.Forms.Button();
             this.stringPathTxt = new System.Windows.Forms.TextBox();
             this.stringUnpackBtn = new System.Windows.Forms.Button();
-            this.txt2xlsxBtn = new System.Windows.Forms.Button();
-            this.xlsx2txtBtn = new System.Windows.Forms.Button();
+            this.stringsPackBtn = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.rmdpPage.SuspendLayout();
             this.stringPage.SuspendLayout();
@@ -134,15 +134,25 @@
             this.stringPage.Text = "string_table.bin";
             this.stringPage.UseVisualStyleBackColor = true;
             // 
-            // stringsPackBtn
+            // xlsx2txtBtn
             // 
-            this.stringsPackBtn.Location = new System.Drawing.Point(6, 92);
-            this.stringsPackBtn.Name = "stringsPackBtn";
-            this.stringsPackBtn.Size = new System.Drawing.Size(355, 26);
-            this.stringsPackBtn.TabIndex = 0;
-            this.stringsPackBtn.Text = "Create string_table.bin...";
-            this.stringsPackBtn.UseVisualStyleBackColor = true;
-            this.stringsPackBtn.Click += new System.EventHandler(this.stringsPackBtn_Click);
+            this.xlsx2txtBtn.Location = new System.Drawing.Point(186, 61);
+            this.xlsx2txtBtn.Name = "xlsx2txtBtn";
+            this.xlsx2txtBtn.Size = new System.Drawing.Size(175, 23);
+            this.xlsx2txtBtn.TabIndex = 7;
+            this.xlsx2txtBtn.Text = "xlsx to txt";
+            this.xlsx2txtBtn.UseVisualStyleBackColor = true;
+            this.xlsx2txtBtn.Click += new System.EventHandler(this.xlsx2txtBtn_Click);
+            // 
+            // txt2xlsxBtn
+            // 
+            this.txt2xlsxBtn.Location = new System.Drawing.Point(6, 61);
+            this.txt2xlsxBtn.Name = "txt2xlsxBtn";
+            this.txt2xlsxBtn.Size = new System.Drawing.Size(175, 23);
+            this.txt2xlsxBtn.TabIndex = 6;
+            this.txt2xlsxBtn.Text = "txt to xlsx";
+            this.txt2xlsxBtn.UseVisualStyleBackColor = true;
+            this.txt2xlsxBtn.Click += new System.EventHandler(this.txt2xlsxBtn_Click);
             // 
             // stringPathBtn
             // 
@@ -152,6 +162,7 @@
             this.stringPathBtn.TabIndex = 3;
             this.stringPathBtn.Text = "Choose file...";
             this.stringPathBtn.UseVisualStyleBackColor = true;
+            this.stringPathBtn.Click += new System.EventHandler(this.stringPathBtn_Click);
             // 
             // stringPathTxt
             // 
@@ -169,25 +180,15 @@
             this.stringUnpackBtn.Text = "Unpack string_table.bin";
             this.stringUnpackBtn.UseVisualStyleBackColor = true;
             // 
-            // txt2xlsxBtn
+            // stringsPackBtn
             // 
-            this.txt2xlsxBtn.Location = new System.Drawing.Point(6, 61);
-            this.txt2xlsxBtn.Name = "txt2xlsxBtn";
-            this.txt2xlsxBtn.Size = new System.Drawing.Size(175, 23);
-            this.txt2xlsxBtn.TabIndex = 6;
-            this.txt2xlsxBtn.Text = "txt to xlsx";
-            this.txt2xlsxBtn.UseVisualStyleBackColor = true;
-            this.txt2xlsxBtn.Click += new System.EventHandler(this.txt2xlsxBtn_Click);
-            // 
-            // xlsx2txtBtn
-            // 
-            this.xlsx2txtBtn.Location = new System.Drawing.Point(186, 61);
-            this.xlsx2txtBtn.Name = "xlsx2txtBtn";
-            this.xlsx2txtBtn.Size = new System.Drawing.Size(175, 23);
-            this.xlsx2txtBtn.TabIndex = 7;
-            this.xlsx2txtBtn.Text = "xlsx to txt";
-            this.xlsx2txtBtn.UseVisualStyleBackColor = true;
-            this.xlsx2txtBtn.Click += new System.EventHandler(this.xlsx2txtBtn_Click);
+            this.stringsPackBtn.Location = new System.Drawing.Point(6, 92);
+            this.stringsPackBtn.Name = "stringsPackBtn";
+            this.stringsPackBtn.Size = new System.Drawing.Size(355, 26);
+            this.stringsPackBtn.TabIndex = 0;
+            this.stringsPackBtn.Text = "Create string_table.bin...";
+            this.stringsPackBtn.UseVisualStyleBackColor = true;
+            this.stringsPackBtn.Click += new System.EventHandler(this.stringsPackBtn_Click);
             // 
             // MainForm
             // 
