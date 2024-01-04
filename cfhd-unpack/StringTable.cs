@@ -77,7 +77,7 @@ namespace control_unpack
             }
         }
 
-        public static void ToXlsx(string txtPath)
+        public static void TxtToExcel(string txtPath)
         {
             Dictionary<string, string> table = ReadStringTable(txtPath);
 
@@ -90,13 +90,40 @@ namespace control_unpack
             foreach (KeyValuePair<string, string> pair in table)
             {
                 i++;
-                sheet.Cells[i, 1] = pair.Key;
-                sheet.Cells[i, 2] = pair.Value;
+                sheet.Cells[i, 1] = i;
+                sheet.Cells[i, 2] = pair.Key;
+                sheet.Cells[i, 3] = pair.Value;
             }
 
             sheet.Columns.AutoFit();
             sheet.Rows.AutoFit();
             excel.Visible = true;
+        }
+
+        public static void ExcelToTxt(string excelPath, string txtPath)
+        {
+            Excel.Application excel = new Excel.Application();
+            Excel.Workbook book = excel.Workbooks.Add(excelPath);
+            Excel.Worksheet sheet = book.Worksheets[1];
+            sheet.Activate();
+
+            string output = "";
+            uint i = 1;
+            string stringNumber = Convert.ToString(sheet.Cells[i, 1].Value2);
+            while (!string.IsNullOrWhiteSpace(stringNumber))
+            {
+                string key = Convert.ToString(sheet.Cells[i, 2].Value2);
+                string value = Convert.ToString(sheet.Cells[i, 3].Value2);
+                output += $"{key}=`{value}`{Environment.NewLine}";
+
+                stringNumber = Convert.ToString(sheet.Cells[++i, 1].Value2);
+            }
+
+            book.Close(0);
+            excel.Quit();
+
+            output = output.Remove(output.Length - Environment.NewLine.Length);
+            File.WriteAllText(txtPath, output, Encoding.Unicode);
         }
 
     }

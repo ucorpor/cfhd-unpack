@@ -167,32 +167,66 @@ namespace control_unpack
             Enabled = false;
             Cursor = Cursors.WaitCursor;
 
-            // try
-            // {
+            try
+            {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Filter = "TXT-files (*.txt)|*.txt"
                     + "|All files (*.*)|*.*";
                 DialogResult result = dialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    StringTable.ToXlsx(dialog.FileName);
+                    StringTable.TxtToExcel(dialog.FileName);
                 }
-            // }
-            // catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-            //finally
-            //{
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
                 rmdpProgressLbl.Text = string.Empty;
                 Enabled = true;
                 Cursor = Cursors.Default;
-            //}
+            }
         }
 
         private void xlsx2txtBtn_Click(object sender, EventArgs e)
         {
+            Enabled = false;
+            Cursor = Cursors.WaitCursor;
 
+            try
+            {
+                OpenFileDialog excelDialog = new OpenFileDialog();
+                excelDialog.Filter = "Excel-files (*.xls;*.xlsx)|*.xls;*.xlsx"
+                    + "|All files (*.*)|*.*";
+                DialogResult excelResult = excelDialog.ShowDialog();
+                if (excelResult == DialogResult.OK)
+                {
+                    SaveFileDialog txtDialog = new SaveFileDialog();
+                    txtDialog.FileName = "string_table.bin.txt";
+                    txtDialog.Filter = "TXT-files (*.txt)|*.txt"
+                        + "|All files (*.*)|*.*";
+                    DialogResult txtResult = txtDialog.ShowDialog();
+                    if (txtResult == DialogResult.OK)
+                    {
+                        StringTable.ExcelToTxt(excelDialog.FileName, txtDialog.FileName);
+                        string message = $"Successfully saved TXT-file to: {txtDialog.FileName}{Environment.NewLine}";
+                        MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                rmdpProgressLbl.Text = string.Empty;
+                Enabled = true;
+                Cursor = Cursors.Default;
+            }
         }
+
     }
 }
