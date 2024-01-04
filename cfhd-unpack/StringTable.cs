@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace control_unpack
 {
@@ -29,11 +31,10 @@ namespace control_unpack
             File.WriteAllText(txtPath, output, Encoding.Unicode);
         }
 
-        public static void Pack(string txtPath, string binPath)
+        private static Dictionary<string, string> ReadStringTable(string txtPath)
         {
-            File.WriteAllText(binPath, string.Empty);
             StreamReader txtReader = new StreamReader(txtPath, Encoding.Unicode, true);
-            Dictionary<string, string> table = new Dictionary<string, string>(); 
+            Dictionary<string, string> table = new Dictionary<string, string>();
             while (!txtReader.EndOfStream)
             {
                 string[] keyValue = txtReader.ReadLine().Split('=');
@@ -51,7 +52,13 @@ namespace control_unpack
                 table.Add(key, value);
             }
             txtReader.Close();
+            return table;
+        }
 
+        public static void Pack(string txtPath, string binPath)
+        {
+            File.WriteAllText(binPath, string.Empty);
+            Dictionary<string, string> table = ReadStringTable(txtPath);
             uint stringsCount = Convert.ToUInt32(table.Count);
             byte[] stringsCountBytes = BitConverter.GetBytes(stringsCount);
             Common.WriteBytes(stringsCountBytes, binPath);
@@ -68,6 +75,28 @@ namespace control_unpack
                 Common.WriteBytes(valueLength, binPath);
                 Common.WriteBytes(valueBytes, binPath);
             }
+        }
+
+        public static void ToXlsx(string txtPath)
+        {
+            Dictionary<string, string> table = ReadStringTable(txtPath);
+
+            Excel.Application excel = new Excel.Application();
+            Excel.Workbook book = excel.Workbooks.Add();
+            Excel.Worksheet sheet = book.Worksheets[1];
+            sheet.Activate();
+
+            int i = 0;
+            foreach (KeyValuePair<string, string> pair in table)
+            {
+                i++;
+                sheet.Cells[i, 1] = pair.Key;
+                sheet.Cells[i, 2] = pair.Value;
+            }
+
+            sheet.Columns.AutoFit();
+            sheet.Rows.AutoFit();
+            excel.Visible = true;
         }
 
     }

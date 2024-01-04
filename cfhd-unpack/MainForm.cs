@@ -164,7 +164,30 @@ namespace control_unpack
 
         private void txt2xlsxBtn_Click(object sender, EventArgs e)
         {
+            Enabled = false;
+            Cursor = Cursors.WaitCursor;
 
+            // try
+            // {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Filter = "TXT-files (*.txt)|*.txt"
+                    + "|All files (*.*)|*.*";
+                DialogResult result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    StringTable.ToXlsx(dialog.FileName);
+                }
+            // }
+            // catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+            //finally
+            //{
+                rmdpProgressLbl.Text = string.Empty;
+                Enabled = true;
+                Cursor = Cursors.Default;
+            //}
         }
 
         private void xlsx2txtBtn_Click(object sender, EventArgs e)
