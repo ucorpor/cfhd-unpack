@@ -115,7 +115,7 @@ namespace control_unpack
             while (!string.IsNullOrWhiteSpace(stringNumber))
             {
                 string key = Convert.ToString(sheet.Cells[i, 2].Value2);
-                string value = Convert.ToString(sheet.Cells[i, 3].Value2);
+                string value = Convert.ToString(sheet.Cells[i, 4].Value2);
                 output += $"{key}=`{value}`{Environment.NewLine}";
 
                 stringNumber = Convert.ToString(sheet.Cells[++i, 1].Value2);
