@@ -91,7 +91,9 @@ namespace control_unpack
             {
                 i++;
                 sheet.Cells[i, 1] = i;
+                sheet.Cells[i, 2].NumberFormat = "@";
                 sheet.Cells[i, 2] = pair.Key;
+                sheet.Cells[i, 3].NumberFormat = "@";
                 sheet.Cells[i, 3] = pair.Value;
             }
 
